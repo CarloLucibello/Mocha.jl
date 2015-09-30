@@ -43,7 +43,6 @@ function apply_l2_cons!{T <: AbstractFloat}(backend::CPUBackend, blob::CPUBlob{T
     norm = vecnorm(param[:, i])
     if (!strict && norm > threshold) || (strict && abs(norm/threshold - 1) > reltol)
       scale_factor =  (1. / norm) * threshold
-      println("rescaling $scale_factor")
       offset = sizeof(T) * (i-1) * ninputs
       BLAS.scal!(ninputs, convert(T, scale_factor), pointer(param) + offset, 1)
     end
